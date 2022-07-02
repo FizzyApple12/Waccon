@@ -8,7 +8,7 @@ jobs:
             - name: Download Required Packages
               run: sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
             - run: ls -la
-            - run: cd $GITHUB_WORKSPACE/WaccaProtocolTranslator
+            - run: cd ./WaccaProtocolTranslator
             - run: ls -la
             - run: sudo chmod +x autobuild.sh
             - name: Run Autobuild
@@ -16,4 +16,4 @@ jobs:
             - uses: actions/upload-artifact@v3
               with:
                 name: Protocol Translator Firmware
-                path: $GITHUB_WORKSPACE/WaccaProtocolTranslator/artifacts/
+                path: ./artifacts/
