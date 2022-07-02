@@ -2,22 +2,12 @@
 #define _WACCA_SERIAL_
 
 #include "pico.h"
-#include "pico/time.h"
-#include "pico/multicore.h"
-#include "hardware/i2c.h"
-#include <stdbool.h>
-#include <string.h>
-#include "queue.h"
-#include "pico/stdio.h"
-#include "pico/stdio_usb.h"
-#include "pico/stdlib.h"
-#include <stdio.h>
 
 // Massive thank you to the contributors for the WACVR project <3
 
 //#define DEBUG_MODE // uncomment for debug messages (note: this will slow things down!)
 
-#define RIGHT //uncomment to enable righty flip on interface and sync board data swap
+//#define RIGHT //uncomment to enable righty flip on interface and sync board data swap
 
 #define CMD_GET_SYNC_BOARD_VER 0xa0
 #define CMD_NEXT_READ 0x72

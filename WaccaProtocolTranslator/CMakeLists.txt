@@ -10,10 +10,10 @@ pico_sdk_init()
 
 add_executable(wacca_protocol_translator
     main.c
-    waccaserial.h
+    serial.c
     waccaserial.c
-    queue.h
     queue.c
+    usbDescriptors.c
 )
 
 # Add pico_stdlib library which aggregates commonly used features
@@ -21,12 +21,12 @@ target_link_libraries(wacca_protocol_translator
     pico_stdlib
     hardware_i2c
     pico_multicore
-    pico_stdio
-    pico_stdio_usb
+    tinyusb_device
+)
+
+target_include_directories(wacca_protocol_translator PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(wacca_protocol_translator)
-
-pico_enable_stdio_usb(wacca_protocol_translator 1)
-pico_enable_stdio_uart(wacca_protocol_translator 0)

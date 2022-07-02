@@ -1,4 +1,5 @@
 #include "waccaserial.h"
+
 #include "pico.h"
 #include "pico/time.h"
 #include "pico/multicore.h"
@@ -6,10 +7,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include "queue.h"
-#include "pico/stdio.h"
-#include "pico/stdio_usb.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
+#include "serial.h"
 
 // Massive thank you to the contributors for the WACVR project <3
 
@@ -32,10 +32,7 @@ bool runningMulticore = false;
 #endif
 
 void ws_start() {
-    stdio_init_all();
-    stdio_flush();
-
-    stdio_filter_driver(NULL);
+    setup();
 
     #ifdef DEBUG_MODE
         gpio_init(PICO_DEFAULT_LED_PIN);
@@ -56,6 +53,8 @@ void ws_touchThreadLoop() {
             blink0();
         #endif
 
+        update(); // update tinyusb
+
         uint32_t currentTime = to_ms_since_boot(get_absolute_time());
         elapsedTime += currentTime - previousTime;
         previousTime = currentTime;
@@ -69,12 +68,6 @@ void ws_touchThreadLoop() {
             dequeue(&touchQueueHead);
             ws_sendTouchState();
         }
-
-        //if (StartUp) ws_sendTouchState();
-        
-        //ws_sendTouchState();
-
-        //if (stdio_usb_connected()) ws_readHead(); 
         ws_readHead(); 
     }
 }
@@ -84,14 +77,14 @@ void ws_sendTouchState() {
 }
 
 void ws_readHead() {
-    inByte = getchar_timeout_us(0);
+    inByte = read();
 
     if (inByte != 0xff && inByte != 0) {
         uint8_t data = 0;
         uint8_t importantData = 0;
         int i = 0;
         do {
-            data = getchar_timeout_us(0);
+            data = read();
             if (i == 2) importantData = data;
             i++;
         } while (data != 0xff && data != 0);
@@ -113,13 +106,13 @@ void ws_sendResp(char importantNextReadData) {
 
             StartUp = false;
             
-            putchar_raw(inByte);
-            
+            write(inByte);
+
             for (int i = 0; i < 6; i++) {
-                putchar_raw(SYNC_BOARD_VER[i]);
+                write(SYNC_BOARD_VER[i]);
             }
 
-            putchar_raw(44);
+            write(44);
             break;
         case CMD_NEXT_READ:
             #ifdef DEBUG_MODE
@@ -131,24 +124,24 @@ void ws_sendResp(char importantNextReadData) {
             switch (importantNextReadData) {
                 case 0x30:
                     for (int i = 0; i < 80; i++) {
-                        putchar_raw(read1[i]);
+                        write(read1[i]);
                     }
                     
-                    putchar_raw(bh_calcChecksum((uint8_t *) read1, 80));
+                    write(bh_calcChecksum((uint8_t *) read1, 80));
                     break;
                 case 0x31:
                     for (int i = 0; i < 80; i++) {
-                        putchar_raw(read2[i]);
+                        write(read2[i]);
                     }
                     
-                    putchar_raw(bh_calcChecksum((uint8_t *) read2, 80));
+                    write(bh_calcChecksum((uint8_t *) read2, 80));
                     break;
                 case 0x33:
                     for (int i = 0; i < 80; i++) {
-                        putchar_raw(read3[i]);
+                        write(read3[i]);
                     }
                     
-                    putchar_raw(bh_calcChecksum((uint8_t *) read3, 80));
+                    write(bh_calcChecksum((uint8_t *) read3, 80));
                     break;
                 default:
                     break;
@@ -161,30 +154,30 @@ void ws_sendResp(char importantNextReadData) {
                 blink();
             #endif
 
-            putchar_raw(inByte);
+            write(inByte);
             
             for (int i = 0; i < 6; i++) {
-                putchar_raw(SYNC_BOARD_VER[i]);
+                write(SYNC_BOARD_VER[i]);
             }
 
             #ifdef RIGHT
-                putchar_raw('R');
+                write('R');
             #endif
             #ifndef RIGHT
-                putchar_raw('L');
+                write('L');
             #endif
 
             for (int i = 0; i < 6; i++) {
                 for (int i = 0; i < 6; i++) {
-                    putchar_raw(UNIT_BOARD_VER[i]);
+                    write(UNIT_BOARD_VER[i]);
                 }
             }
 
             #ifdef RIGHT
-                putchar_raw(118);
+                write(118);
             #endif
             #ifndef RIGHT
-                putchar_raw(104);
+                write(104);
             #endif
 
             break;
@@ -199,7 +192,7 @@ void ws_sendResp(char importantNextReadData) {
             StartUp = false;
 
             for (int i = 0; i < 7; i++) {
-                putchar_raw(SettingData_162[i]);
+                write(SettingData_162[i]);
             }
             break;
         case CMD_MYSTERY2:
@@ -210,7 +203,7 @@ void ws_sendResp(char importantNextReadData) {
             StartUp = false;
 
             for (int i = 0; i < 7; i++) {
-                putchar_raw(SettingData_148[i]);
+                write(SettingData_148[i]);
             }
             break;
         case CMD_START_AUTO_SCAN:
@@ -223,15 +216,10 @@ void ws_sendResp(char importantNextReadData) {
             #endif
 
             for (int i = 0; i < 7; i++) {
-                putchar_raw(SettingData_201[i]);
+                write(SettingData_201[i]);
             }
 
             StartUp = true;
-
-            /*if (!runningMulticore) {
-                multicore_launch_core1(ws_touchThreadLoop);
-                runningMulticore = true;
-            }*/
             break;
         case CMD_BEGIN_WRITE:
             break;
@@ -241,6 +229,7 @@ void ws_sendResp(char importantNextReadData) {
             StartUp = false;
             break;
     }
+    sendRemaining();
 }
 
 void ws_getTouchPack() {
@@ -256,8 +245,10 @@ void ws_sendTouch() {
         ws_getTouchPack();
 
         for (int i = 0; i < 36; i++) {
-            putchar_raw(TouchPack[i]);
+            write(TouchPack[i]);
         }
+
+        sendRemaining();
     }
 }
 

@@ -2,7 +2,6 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "waccaserial.h"
-#include <stdio.h>
 
 #define TOUCH_I2C_PORT i2c0
 #define TOUCH_I2C_SDA 4
