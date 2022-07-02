@@ -6,7 +6,10 @@
 #include <stdbool.h>
 #include <string.h>
 #include "queue.h"
+#include "pico/stdio.h"
 #include "pico/stdio_usb.h"
+#include "pico/stdlib.h"
+#include <stdio.h>
 
 // Massive thank you to the contributors for the WACVR project <3
 
@@ -21,20 +24,44 @@ uint32_t previousTime = 0;
 
 bool runningMulticore = false;
 
+#ifdef DEBUG_MODE
+    #define led(state) gpio_put(PICO_DEFAULT_LED_PIN, state)
+    #define blink() led(1); sleep_ms(25); led(0); sleep_ms(75)
+    #define blinkL() led(1); sleep_ms(1000); led(0); sleep_ms(1000)
+    #define blink0() led(1); sleep_ms(1); led(0); sleep_ms(75)
+#endif
+
 void ws_start() {
-    stdio_usb_init();
+    stdio_init_all();
+    stdio_flush();
+
+    stdio_filter_driver(NULL);
+
+    #ifdef DEBUG_MODE
+        gpio_init(PICO_DEFAULT_LED_PIN);
+        gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+
+        blinkL();
+    #endif
 
     previousTime = to_ms_since_boot(get_absolute_time());
+    
+    multicore_launch_core1(ws_touchThreadLoop);
+    runningMulticore = true;
 }
 
 void ws_touchThreadLoop() {
     while (true) {
+        #ifdef DEBUG_MODE
+            blink0();
+        #endif
+
         uint32_t currentTime = to_ms_since_boot(get_absolute_time());
         elapsedTime += currentTime - previousTime;
         previousTime = currentTime;
 
-        if (elapsedTime >= 1000) {
-            elapsedTime -= 1000;
+        if (elapsedTime >= 10) {
+            elapsedTime -= 10;
             enqueue(&touchQueueHead, 1);
         } 
 
@@ -43,7 +70,12 @@ void ws_touchThreadLoop() {
             ws_sendTouchState();
         }
 
-        if (stdio_usb_connected()) ws_readHead(); 
+        //if (StartUp) ws_sendTouchState();
+        
+        //ws_sendTouchState();
+
+        //if (stdio_usb_connected()) ws_readHead(); 
+        ws_readHead(); 
     }
 }
 
@@ -52,9 +84,9 @@ void ws_sendTouchState() {
 }
 
 void ws_readHead() {
-    uint8_t inByte = getchar_timeout_us(0);
+    inByte = getchar_timeout_us(0);
 
-    if (inByte != 0) {
+    if (inByte != 0xff && inByte != 0) {
         uint8_t data = 0;
         uint8_t importantData = 0;
         int i = 0;
@@ -62,7 +94,11 @@ void ws_readHead() {
             data = getchar_timeout_us(0);
             if (i == 2) importantData = data;
             i++;
-        } while (data != 0);
+        } while (data != 0xff && data != 0);
+
+        #ifdef DEBUG_MODE
+            blink();
+        #endif
 
         ws_sendResp(importantData);
     }
@@ -71,6 +107,10 @@ void ws_readHead() {
 void ws_sendResp(char importantNextReadData) {
     switch (inByte) {
         case CMD_GET_SYNC_BOARD_VER:
+            #ifdef DEBUG_MODE
+                blink();
+            #endif
+
             StartUp = false;
             
             putchar_raw(inByte);
@@ -82,6 +122,11 @@ void ws_sendResp(char importantNextReadData) {
             putchar_raw(44);
             break;
         case CMD_NEXT_READ:
+            #ifdef DEBUG_MODE
+                blink();
+                blink();
+            #endif
+
             StartUp = false;
             switch (importantNextReadData) {
                 case 0x30:
@@ -110,6 +155,12 @@ void ws_sendResp(char importantNextReadData) {
             }
             break;
         case CMD_GET_UNIT_BOARD_VER:
+            #ifdef DEBUG_MODE
+                blink();
+                blink();
+                blink();
+            #endif
+
             putchar_raw(inByte);
             
             for (int i = 0; i < 6; i++) {
@@ -138,6 +189,13 @@ void ws_sendResp(char importantNextReadData) {
 
             break;
         case CMD_MYSTERY1:
+            #ifdef DEBUG_MODE
+                blink();
+                blink();
+                blink();
+                blink();
+            #endif
+
             StartUp = false;
 
             for (int i = 0; i < 7; i++) {
@@ -145,6 +203,10 @@ void ws_sendResp(char importantNextReadData) {
             }
             break;
         case CMD_MYSTERY2:
+            #ifdef DEBUG_MODE
+                blink();
+            #endif
+
             StartUp = false;
 
             for (int i = 0; i < 7; i++) {
@@ -152,16 +214,24 @@ void ws_sendResp(char importantNextReadData) {
             }
             break;
         case CMD_START_AUTO_SCAN:
+            #ifdef DEBUG_MODE
+                blink();
+                blink();
+                blink();
+                blink();
+                blink();
+            #endif
+
             for (int i = 0; i < 7; i++) {
                 putchar_raw(SettingData_201[i]);
             }
 
             StartUp = true;
 
-            if (!runningMulticore) {
+            /*if (!runningMulticore) {
                 multicore_launch_core1(ws_touchThreadLoop);
                 runningMulticore = true;
-            }
+            }*/
             break;
         case CMD_BEGIN_WRITE:
             break;
@@ -194,9 +264,9 @@ void ws_sendTouch() {
 // since i want the wacca panels to be as simple as possible, i need to reverse the input order on the right side to fit with how the game reads data
 #ifdef RIGHT
 uint8_t reverseAndShift(uint8_t b) {
-    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    b = ((b & 0xF0) >> 4) | ((b & 0x0F) << 4);
+    b = ((b & 0xCC) >> 2) | ((b & 0x33) << 2);
+    b = ((b & 0xAA) >> 1) | ((b & 0x55) << 1);
     return b >> 3;
 }
 #endif
