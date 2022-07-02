@@ -4,13 +4,14 @@ jobs:
     Build-Protocol-Translator:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v3
             - name: Download Required Packages
               run: sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
             - name: Move to Protocol Translator Code
-              run: cd WaccaProtocolTranslator
+              run: cd $GITHUB_WORKSPACE/WaccaProtocolTranslator
             - name: Run Autobuild
               run: sudo sh autobuild.sh
             - uses: actions/upload-artifact@v3
               with:
                 name: Protocol Translator Firmware
-                path: WaccaProtocolTranslator/artifacts/
+                path: $GITHUB_WORKSPACE/WaccaProtocolTranslator/artifacts/

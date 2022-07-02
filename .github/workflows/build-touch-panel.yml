@@ -4,13 +4,14 @@ jobs:
     Build-Touch-Panel:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v3
             - name: Download Required Packages
               run: sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
             - name: Move to Touch Panel Code
-              run: cd WaccaTouchPanel
+              run: cd $GITHUB_WORKSPACE/WaccaTouchPanel
             - name: Run Autobuild
               run: sudo sh autobuild.sh
             - uses: actions/upload-artifact@v3
               with:
                 name: Touch Panel Firmware
-                path: WaccaTouchPanel/artifacts/
+                path: $GITHUB_WORKSPACE/WaccaTouchPanel/artifacts/
