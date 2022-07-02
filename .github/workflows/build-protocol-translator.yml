@@ -7,8 +7,8 @@ jobs:
             - uses: actions/checkout@v3
             - name: Download Required Packages
               run: sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
-            - name: Move to Protocol Translator Code
-              run: cd $GITHUB_WORKSPACE/WaccaProtocolTranslator
+            - run: cd $GITHUB_WORKSPACE/WaccaProtocolTranslator
+            - run: chmod +x autobuild.sh
             - name: Run Autobuild
               run: sudo sh autobuild.sh
             - uses: actions/upload-artifact@v3
