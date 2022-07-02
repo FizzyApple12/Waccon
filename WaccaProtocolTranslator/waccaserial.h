@@ -9,6 +9,12 @@
 
 //#define RIGHT //uncomment to enable righty flip on interface and sync board data swap
 
+#if OPT_RIGHT // used for automatic compilation
+    #ifndef RIGHT
+        #define RIGHT
+    #endif
+#endif
+
 #define CMD_GET_SYNC_BOARD_VER 0xa0
 #define CMD_NEXT_READ 0x72
 #define CMD_GET_UNIT_BOARD_VER 0xa8

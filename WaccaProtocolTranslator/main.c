@@ -3,15 +3,35 @@
 #include "hardware/i2c.h"
 #include "waccaserial.h"
 
+#ifdef OPT_PRESETPANELS // for autocompile
+    #if OPT_SINGLE_TOUCH
+        #define TOUCH_PANEL_0_ADDR 0x10
+        #define TOUCH_PANEL_1_ADDR 0x10 
+        #define TOUCH_PANEL_2_ADDR 0x10 
+        #define TOUCH_PANEL_3_ADDR 0x10 
+        #define TOUCH_PANEL_4_ADDR 0x10 
+        #define TOUCH_PANEL_5_ADDR 0x10 
+    #else
+        #define TOUCH_PANEL_0_ADDR 0x10
+        #define TOUCH_PANEL_1_ADDR 0x11 
+        #define TOUCH_PANEL_2_ADDR 0x12 
+        #define TOUCH_PANEL_3_ADDR 0x13 
+        #define TOUCH_PANEL_4_ADDR 0x14 
+        #define TOUCH_PANEL_5_ADDR 0x15 
+    #endif
+#endif
+
 #define TOUCH_I2C_PORT i2c0
 #define TOUCH_I2C_SDA 4
 #define TOUCH_I2C_SCL 5
+#ifndef OPT_PRESETPANELS
 #define TOUCH_PANEL_0_ADDR 0x10
 #define TOUCH_PANEL_1_ADDR 0x10 //0x11
 #define TOUCH_PANEL_2_ADDR 0x10 //0x12
 #define TOUCH_PANEL_3_ADDR 0x10 //0x13
 #define TOUCH_PANEL_4_ADDR 0x10 //0x14
 #define TOUCH_PANEL_5_ADDR 0x10 //0x15
+#endif
 #define TOUCH_I2C_FREQ 100000
 
 uint32_t touchPanel0Data = 0;

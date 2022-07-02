@@ -1,8 +1,10 @@
 WaccaProtocolTranslator/build/
+WaccaProtocolTranslator/artifacts/
 
 WaccaProtocolTranslator/.vscode/
 
 WaccaTouchPanel/build/
+WaccaTouchPanel/artifacts/
 
 WaccaTouchPanel/.vscode/
 

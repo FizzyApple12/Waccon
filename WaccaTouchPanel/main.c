@@ -7,9 +7,25 @@
 
 //#define DEBUG_MODE // uncomment for debug messages (note: this will slow things down!)
 
+#if OPT_PANEL1 // used for automatic compilation
+    #define MOTHERBOARD_I2C_HWID 0x10
+#elif OPT_PANEL2
+    #define MOTHERBOARD_I2C_HWID 0x11
+#elif OPT_PANEL3
+    #define MOTHERBOARD_I2C_HWID 0x12
+#elif OPT_PANEL4
+    #define MOTHERBOARD_I2C_HWID 0x13
+#elif OPT_PANEL5
+    #define MOTHERBOARD_I2C_HWID 0x14
+#elif OPT_PANEL6
+    #define MOTHERBOARD_I2C_HWID 0x15
+#endif
+
 #define MOTHERBOARD_I2C_PORT i2c1
 #define MOTHERBOARD_I2C_IRQ I2C1_IRQ
-#define MOTHERBOARD_I2C_HWID 0x10 // 0x1[0-5 depending on which position it's in bottom to top]
+#ifndef MOTHERBOARD_I2C_HWID
+    #define MOTHERBOARD_I2C_HWID 0x10 // 0x1[0-5 depending on which position it's in bottom to top]
+#endif
 #define MOTHERBOARD_I2C_SDA 2
 #define MOTHERBOARD_I2C_SCL 3
 #define MOTHERBOARD_I2C_FREQ 100000

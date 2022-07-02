@@ -8,6 +8,8 @@ project(WaccaTouchPanel)
 
 pico_sdk_init()
 
+add_definitions($ENV{CUSTOM_CFLAGS})
+
 add_executable(wacca_protocol_translator
     main.c
     serial.c
