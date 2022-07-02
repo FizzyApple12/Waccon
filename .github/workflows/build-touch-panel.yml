@@ -6,11 +6,11 @@ jobs:
         steps:
             - name: Download Required Packages
               run: sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
-            - name: Move to Protocol Translator Code
-              run: cd $GITHUB_WORKSPACE/WaccaTouchPanel
+            - name: Move to Touch Panel Code
+              run: cd WaccaTouchPanel
             - name: Run Autobuild
               run: sudo sh autobuild.sh
             - uses: actions/upload-artifact@v3
               with:
                 name: Touch Panel Firmware
-                path: $GITHUB_WORKSPACE/WaccaTouchPanel/artifacts/
+                path: WaccaTouchPanel/artifacts/
