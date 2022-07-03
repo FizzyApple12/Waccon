@@ -7,13 +7,13 @@ jobs:
             - uses: actions/checkout@v3
             - name: Download Required Packages
               run: sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
-            - run: ls -la
-            - run: cd ./WaccaTouchPanel
-            - run: ls -la
-            - run: sudo chmod +x autobuild.sh
+            - working-directory: ./WaccaTouchPanel
+            - run: 
             - name: Run Autobuild
-              run: sudo sh autobuild.sh
+              run: |
+                sudo chmod +x autobuild.sh
+                sudo sh autobuild.sh
             - uses: actions/upload-artifact@v3
               with:
                 name: Touch Panel Firmware
-                path: ./artifacts/
+                path: $GITHUB_WORKSPACE/WaccaTouchPanel/artifacts/
