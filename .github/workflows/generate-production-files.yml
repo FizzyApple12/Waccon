@@ -11,11 +11,11 @@ jobs:
               run: |
                 sudo chmod +x autobuild.sh
                 sudo sh autobuild.sh
-              working-directory: ./WaccaTouchPanel
+              working-directory: ./WaccaTouchPanel-firmware
             - uses: actions/upload-artifact@v3
               with:
                 name: Touch Panel Firmware
-                path: ./WaccaTouchPanel/artifacts/
+                path: ./WaccaTouchPanel-firmware/artifacts/
     Build-Protocol-Translator:
         runs-on: ubuntu-latest
         steps:
@@ -26,8 +26,8 @@ jobs:
               run: |
                 sudo chmod +x autobuild.sh
                 sudo sh autobuild.sh
-              working-directory: ./WaccaProtocolTranslator
+              working-directory: ./WaccaProtocolTranslator-firmware
             - uses: actions/upload-artifact@v3
               with:
                 name: Protocol Translator Firmware
-                path: ./WaccaProtocolTranslator/artifacts/
+                path: ./WaccaProtocolTranslator-firmware/artifacts/

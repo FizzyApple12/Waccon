@@ -1,11 +1,13 @@
-WaccaProtocolTranslator/build/
-WaccaProtocolTranslator/artifacts/
+WaccaProtocolTranslator-firmware/build/
+WaccaProtocolTranslator-firmware/artifacts/
 
-WaccaProtocolTranslator/.vscode/
+WaccaProtocolTranslator-firmware/.vscode/
 
-WaccaTouchPanel/build/
-WaccaTouchPanel/artifacts/
+WaccaProtocolTranslator-pcb/WaccaProtocolTranslator-backups
 
-WaccaTouchPanel/.vscode/
+WaccaTouchPanel-firmware/build/
+WaccaTouchPanel-firmware/artifacts/
+
+WaccaTouchPanel-firmware/.vscode/
 
 /**/OldVersions/

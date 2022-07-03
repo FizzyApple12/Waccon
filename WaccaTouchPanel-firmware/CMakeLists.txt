@@ -4,7 +4,7 @@ set(PICO_SDK_FETCH_FROM_GIT on)
 
 include(pico_sdk_import.cmake)
 
-project(WaccaTouchPanel)
+project(WaccaTouchPanel-firmware)
 
 pico_sdk_init()
 
