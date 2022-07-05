@@ -40,11 +40,11 @@ jobs:
             - name: Run KiBot
               run: |
                 kibot -c kibot.yml -e WaccaProtocolTranslator-pcb/WaccaProtocolTranslator.kicad_sch -b WaccaProtocolTranslator-pcb/WaccaProtocolTranslator.kicad_pcb -d WaccaProtocolTranslator-pcb/ -s run_erc,run_drc -v \
-                gerbers.gbr drills.gbr drills.drl pickandplace.csv bom.csv schematic.svg schematic.pdf board_black_top.svg
+                gerbers.gbr drills.gbr drills.drl pickandplace.csv bom.csv schematic.svg schematic.pdf board_black_top.svg model.step
             - uses: actions/upload-artifact@v2
               if: ${{success()}}
               with:
-                name: Wacca Protocol Translator PCB Production Files
+                name: Wacca Protocol Translator PCB Gerbers
                 if-no-files-found: error
                 path: |
                   WaccaProtocolTranslator-pcb/gerbers/**
@@ -58,5 +58,6 @@ jobs:
                 path: |
                   WaccaProtocolTranslator-pcb/docs/**
                   WaccaProtocolTranslator-pcb/img/**
+                  WaccaProtocolTranslator-pcb/cad/**
                   !WaccaProtocolTranslator-pcb/**/*.ogv
                   !WaccaProtocolTranslator-pcb/**/*.log
