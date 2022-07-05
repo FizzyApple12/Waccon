@@ -37,9 +37,9 @@ jobs:
             image: setsoft/kicad_auto:ki6
         steps:
             - uses: actions/checkout@v2
-            - name: run kibot
+            - name: Run KiBot
               run: |
-                kibot -c kibot.yml -e WaccaProtocolTranslator.kicad_sch -b WaccaProtocolTranslator.kicad_pcb -d WaccaProtocolTranslator-pcb/ -s run_erc,run_drc -v \
+                kibot -c kibot.yml -e WaccaProtocolTranslator-pcb/WaccaProtocolTranslator.kicad_sch -b WaccaProtocolTranslator-pcb/WaccaProtocolTranslator.kicad_pcb -d WaccaProtocolTranslator-pcb/ -s run_erc,run_drc -v \
                 gerbers.gbr drills.gbr drills.drl pickandplace.csv bom.csv schematic.svg schematic.pdf board_black_top.svg
             - uses: actions/upload-artifact@v2
               if: ${{success()}}

@@ -1,0 +1,32 @@
+kibot:
+  version: 1
+
+preflight:
+  set_text_variables:
+    - name: "date"
+      command: git log -1 --format="%as"
+    - name: "version"
+      command: git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD
+  update_xml: true
+  run_erc: false
+  run_drc: false
+  check_zone_fills: true
+  ignore_unconnected: true
+# filters:
+#   - name: "exclude_any"
+#     type: "generic"
+#     comment: "Exclude logos, testpoints, fiducials and power"
+#     exclude_any:
+#       - column: Reference
+#         regex: "^(G|#|TP|F).*"
+import:
+# docs 
+  - file: .kibot/docs.kibot.yml
+# fabrications
+  - file: .kibot/bom_octopart.kibot.yml
+  - file: .kibot/gerbers.kibot.yml
+  - file: .kibot/drills.kibot.yml
+  - file: .kibot/fabrications.kibot.yml
+# img
+  - file: .kibot/render.kibot.yml
+  - file: .kibot/plot.kibot.yml
