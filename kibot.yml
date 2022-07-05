@@ -30,3 +30,5 @@ import:
 # img
   - file: .kibot/render.kibot.yml
   - file: .kibot/plot.kibot.yml
+# cad
+  - file: .kibot/step.kibot.yml
