@@ -56,7 +56,7 @@ jobs:
                 name: Wacca Protocol Translator PCB Documentation
                 if-no-files-found: error
                 path: |
-                  $WaccaProtocolTranslator-pcb/docs/**
-                  $WaccaProtocolTranslator-pcb/img/**
+                  WaccaProtocolTranslator-pcb/docs/**
+                  WaccaProtocolTranslator-pcb/img/**
                   !WaccaProtocolTranslator-pcb/**/*.ogv
                   !WaccaProtocolTranslator-pcb/**/*.log
