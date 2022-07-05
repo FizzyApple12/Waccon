@@ -33,7 +33,6 @@ jobs:
                 path: ./WaccaProtocolTranslator-firmware/artifacts/
     Generate-Protocol-Translator-PCB-Files:
         runs-on: ubuntu-latest
-        needs: [DRC]
         container:
             image: setsoft/kicad_auto:ki6
         steps:
