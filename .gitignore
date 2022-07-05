@@ -3,7 +3,10 @@ WaccaProtocolTranslator-firmware/artifacts/
 
 WaccaProtocolTranslator-firmware/.vscode/
 
-WaccaProtocolTranslator-pcb/WaccaProtocolTranslator-backups
+WaccaProtocolTranslator-pcb/WaccaProtocolTranslator-backups/
+WaccaProtocolTranslator-pcb/artifacts/
+WaccaProtocolTranslator-pcb/fp-info-cache
+WaccaProtocolTranslator-pcb/place_footprints.log
 
 WaccaTouchPanel-firmware/build/
 WaccaTouchPanel-firmware/artifacts/

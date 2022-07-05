@@ -31,3 +31,33 @@ jobs:
               with:
                 name: Protocol Translator Firmware
                 path: ./WaccaProtocolTranslator-firmware/artifacts/
+    Generate-Protocol-Translator-PCB-Files:
+        runs-on: ubuntu-latest
+        needs: [DRC]
+        container:
+            image: setsoft/kicad_auto:ki6
+        steps:
+            - uses: actions/checkout@v2
+            - name: run kibot
+              run: |
+                kibot -c kibot.yml -e WaccaProtocolTranslator.kicad_sch -b WaccaProtocolTranslator.kicad_pcb -d WaccaProtocolTranslator-pcb/ -s run_erc,run_drc -v \
+                gerbers.gbr drills.gbr drills.drl pickandplace.csv bom.csv schematic.svg schematic.pdf board_black_top.svg
+            - uses: actions/upload-artifact@v2
+              if: ${{success()}}
+              with:
+                name: Wacca Protocol Translator PCB Production Files
+                if-no-files-found: error
+                path: |
+                  WaccaProtocolTranslator-pcb/gerbers/**
+                  !WaccaProtocolTranslator-pcb/**/*.ogv
+                  !WaccaProtocolTranslator-pcb/**/*.log
+            - uses: actions/upload-artifact@v2
+              if: ${{success()}}
+              with:
+                name: Wacca Protocol Translator PCB Documentation
+                if-no-files-found: error
+                path: |
+                  $WaccaProtocolTranslator-pcb/docs/**
+                  $WaccaProtocolTranslator-pcb/img/**
+                  !WaccaProtocolTranslator-pcb/**/*.ogv
+                  !WaccaProtocolTranslator-pcb/**/*.log

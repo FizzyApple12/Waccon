@@ -21,9 +21,9 @@
     #endif
 #endif
 
-#define TOUCH_I2C_PORT i2c0
-#define TOUCH_I2C_SDA 4
-#define TOUCH_I2C_SCL 5
+#define TOUCH_I2C_PORT i2c1
+#define TOUCH_I2C_SDA 2
+#define TOUCH_I2C_SCL 3
 #ifndef OPT_PRESETPANELS
 #define TOUCH_PANEL_0_ADDR 0x10
 #define TOUCH_PANEL_1_ADDR 0x10 //0x11
