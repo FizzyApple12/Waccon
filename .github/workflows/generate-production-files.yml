@@ -29,7 +29,7 @@ jobs:
             - uses: actions/upload-artifact@v2
               if: ${{success()}}
               with:
-                name: Wacca Protocol Translator PCB Gerbers
+                name: Wacca Touch Panel PCB Gerbers
                 if-no-files-found: error
                 path: |
                   WaccaTouchPanel-pcb/gerbers/**
@@ -38,7 +38,7 @@ jobs:
             - uses: actions/upload-artifact@v2
               if: ${{success()}}
               with:
-                name: Wacca Protocol Translator PCB Documentation
+                name: Wacca Touch Panel PCB Documentation
                 if-no-files-found: error
                 path: |
                   WaccaTouchPanel-pcb/docs/**
