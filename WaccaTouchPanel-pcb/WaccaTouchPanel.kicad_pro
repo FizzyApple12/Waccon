@@ -70,7 +70,7 @@
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "footprint_type_mismatch": "error",
-        "hole_clearance": "error",
+        "hole_clearance": "ignore",
         "hole_near_hole": "error",
         "invalid_outline": "error",
         "item_on_disabled_layer": "error",
@@ -422,7 +422,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "../Wacca Controller/WaccaTouchPanel-pcb.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""

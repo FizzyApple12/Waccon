@@ -16,6 +16,36 @@ jobs:
               with:
                 name: Touch Panel Firmware
                 path: ./WaccaTouchPanel-firmware/artifacts/
+    Generate-Touch-Panel-PCB-Files:
+        runs-on: ubuntu-latest
+        container:
+            image: setsoft/kicad_auto:ki6
+        steps:
+            - uses: actions/checkout@v2
+            - name: Run KiBot
+              run: |
+                kibot -c kibot.yml -e WaccaTouchPanel-pcb/WaccaTouchPanel.kicad_sch -b WaccaTouchPanel-pcb/WaccaTouchPanel.kicad_pcb -d WaccaTouchPanel-pcb/ -s run_erc,run_drc -v \
+                gerbers.gbr drills.gbr drills.drl pickandplace.csv bom.csv schematic.svg schematic.pdf board_black_top.svg model.step
+            - uses: actions/upload-artifact@v2
+              if: ${{success()}}
+              with:
+                name: Wacca Protocol Translator PCB Gerbers
+                if-no-files-found: error
+                path: |
+                  WaccaTouchPanel-pcb/gerbers/**
+                  !WaccaTouchPanel-pcb/**/*.ogv
+                  !WaccaTouchPanel-pcb/**/*.log
+            - uses: actions/upload-artifact@v2
+              if: ${{success()}}
+              with:
+                name: Wacca Protocol Translator PCB Documentation
+                if-no-files-found: error
+                path: |
+                  WaccaTouchPanel-pcb/docs/**
+                  WaccaTouchPanel-pcb/img/**
+                  WaccaTouchPanel-pcb/cad/**
+                  !WaccaTouchPanel-pcb/**/*.ogv
+                  !WaccaTouchPanel-pcb/**/*.log
     Build-Protocol-Translator:
         runs-on: ubuntu-latest
         steps:
