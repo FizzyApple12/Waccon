@@ -19,7 +19,7 @@ jobs:
     Generate-Touch-Panel-PCB-Files:
         runs-on: ubuntu-latest
         container:
-            image: setsoft/kicad_auto:ki6
+            image: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
         steps:
             - uses: actions/checkout@v2
             - name: Run KiBot
@@ -64,7 +64,7 @@ jobs:
     Generate-Protocol-Translator-PCB-Files:
         runs-on: ubuntu-latest
         container:
-            image: setsoft/kicad_auto:ki6
+            image: ghcr.io/inti-cmnb/kicad7_auto:1.6.1
         steps:
             - uses: actions/checkout@v2
             - name: Run KiBot
