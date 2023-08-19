@@ -7,13 +7,15 @@
 
 //#define DEBUG_MODE // uncomment for debug messages (note: this will slow things down!)
 
-//#define RIGHT //uncomment to enable righty flip on interface and sync board data swap
+#define RIGHT //uncomment to enable righty flip on interface and sync board data swap
 
 #if OPT_RIGHT // used for automatic compilation
     #ifndef RIGHT
         #define RIGHT
     #endif
 #endif
+
+#define TOUCH_PANEL_POWER_MOSFET 16
 
 #define CMD_GET_SYNC_BOARD_VER 0xa0
 #define CMD_NEXT_READ 0x72

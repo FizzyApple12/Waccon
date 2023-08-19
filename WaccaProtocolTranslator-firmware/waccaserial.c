@@ -32,6 +32,10 @@ bool runningMulticore = false;
 #endif
 
 void ws_start() {
+    gpio_init(TOUCH_PANEL_POWER_MOSFET);
+    gpio_set_dir(TOUCH_PANEL_POWER_MOSFET, GPIO_OUT);
+    gpio_put(TOUCH_PANEL_POWER_MOSFET, StartUp);
+
     setup();
 
     #ifdef DEBUG_MODE
@@ -230,6 +234,8 @@ void ws_sendResp(char importantNextReadData) {
             break;
     }
     sendRemaining();
+        
+    gpio_put(TOUCH_PANEL_POWER_MOSFET, StartUp);
 }
 
 void ws_getTouchPack() {

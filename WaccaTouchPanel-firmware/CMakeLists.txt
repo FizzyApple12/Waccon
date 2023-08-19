@@ -25,5 +25,5 @@ target_link_libraries(wacca_touch_panel
 # create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(wacca_touch_panel)
 
-pico_enable_stdio_usb(wacca_touch_panel 1)
+pico_enable_stdio_usb(wacca_touch_panel 0)
 pico_enable_stdio_uart(wacca_touch_panel 0)

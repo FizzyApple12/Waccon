@@ -83,12 +83,16 @@ void i2cSlaveI2CIRQHandler() {
             printf("Master requested packet, sending [%u %u %u %u]...\n", (uint8_t) (dataToSend), (uint8_t) (dataToSend >> 8), (uint8_t) (dataToSend >> 16), (uint8_t) (dataToSend >> 24));
         #endif
 
+        gpio_put(PICO_DEFAULT_LED_PIN, true);
+
         txByte(MOTHERBOARD_I2C_PORT, (uint8_t) (dataToSend));
         txByte(MOTHERBOARD_I2C_PORT, (uint8_t) (dataToSend >> 8));
         txByte(MOTHERBOARD_I2C_PORT, (uint8_t) (dataToSend >> 16));
         txByte(MOTHERBOARD_I2C_PORT, (uint8_t) (dataToSend >> 24));
 
         MOTHERBOARD_I2C_PORT->hw->clr_rd_req;
+
+        gpio_put(PICO_DEFAULT_LED_PIN, false);
     }
 }
 
@@ -108,6 +112,10 @@ void setupTouch() {
 
     mpr121_init(TOUCH_I2C_PORT, OUTER_MPR121_ADDR, &outerSensor);
     mpr121_set_thresholds(MPR121_TOUCH_THRESHOLD, MPR121_RELEASE_THRESHOLD, &outerSensor);
+
+    
+    gpio_init(PICO_DEFAULT_LED_PIN);
+    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
 }
 
 void setupMotherboard() {
@@ -137,7 +145,7 @@ void setupMotherboard() {
 #endif
 
 int main() {
-    stdio_init_all();
+    //stdio_init_all();
     printf("Wacca Touch Panel v0.1\n");
 
     printf("Setting up Touch...");
