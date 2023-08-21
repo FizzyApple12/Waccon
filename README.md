@@ -2,6 +2,8 @@
 
 This repo is right now still a work in progress, nothing has been finalized and things will probably be broken, stay tuned as things are finalized though!
 
+![Simplified CAD Screenshot](<https://fizzyapple12.com/waccon.png>)
+
 ![Controller Block Diagram](<https://github.com/FizzyApple12/Waccon/blob/master/Block Diagram.png>)
 
 If you'd like to test out the current firmware on your own hardware, there are 2 github actions scripts for the Touch Panel firmware and the Protocol Translator firmware
